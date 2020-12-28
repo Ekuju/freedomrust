@@ -70,8 +70,8 @@ pub(crate) fn provide(providers: &mut Providers) {
             mir_const_qualif(tcx, ty::WithOptConstParam { did, const_param_did: Some(param_did) })
         },
         mir_promoted,
-        mir_drops_elaborated_and_const_checked,
-        optimized_mir,
+        // mir_drops_elaborated_and_const_checked,
+        // optimized_mir,
         optimized_mir_of_const_arg,
         is_mir_available,
         promoted_mir: |tcx, def_id| {
@@ -319,29 +319,29 @@ fn mir_promoted(
     (tcx.alloc_steal_mir(body), tcx.alloc_steal_promoted(promoted))
 }
 
-fn mir_drops_elaborated_and_const_checked<'tcx>(
-    tcx: TyCtxt<'tcx>,
-    def: ty::WithOptConstParam<LocalDefId>,
-) -> &'tcx Steal<Body<'tcx>> {
-    if let Some(def) = def.try_upgrade(tcx) {
-        return tcx.mir_drops_elaborated_and_const_checked(def);
-    }
-
-    // (Mir-)Borrowck uses `mir_promoted`, so we have to force it to
-    // execute before we can steal.
-    if let Some(param_did) = def.const_param_did {
-        tcx.ensure().mir_borrowck_const_arg((def.did, param_did));
-    } else {
-        tcx.ensure().mir_borrowck(def.did);
-    }
-
-    let (body, _) = tcx.mir_promoted(def);
-    let mut body = body.steal();
-
-    run_post_borrowck_cleanup_passes(tcx, &mut body);
-    check_consts::post_drop_elaboration::check_live_drops(tcx, &body);
-    tcx.alloc_steal_mir(body)
-}
+// fn mir_drops_elaborated_and_const_checked<'tcx>(
+//     tcx: TyCtxt<'tcx>,
+//     def: ty::WithOptConstParam<LocalDefId>,
+// ) -> &'tcx Steal<Body<'tcx>> {
+//     if let Some(def) = def.try_upgrade(tcx) {
+//         return tcx.mir_drops_elaborated_and_const_checked(def);
+//     }
+//
+//     // (Mir-)Borrowck uses `mir_promoted`, so we have to force it to
+//     // execute before we can steal.
+//     if let Some(param_did) = def.const_param_did {
+//         tcx.ensure().mir_borrowck_const_arg((def.did, param_did));
+//     } else {
+//         tcx.ensure().mir_borrowck(def.did);
+//     }
+//
+//     let (body, _) = tcx.mir_promoted(def);
+//     let mut body = body.steal();
+//
+//     run_post_borrowck_cleanup_passes(tcx, &mut body);
+//     check_consts::post_drop_elaboration::check_live_drops(tcx, &body);
+//     tcx.alloc_steal_mir(body)
+// }
 
 /// After this series of passes, no lifetime analysis based on borrowing can be done.
 fn run_post_borrowck_cleanup_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
@@ -456,14 +456,14 @@ fn run_optimization_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
     );
 }
 
-fn optimized_mir<'tcx>(tcx: TyCtxt<'tcx>, did: DefId) -> &'tcx Body<'tcx> {
-    let did = did.expect_local();
-    if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
-        tcx.optimized_mir_of_const_arg(def)
-    } else {
-        tcx.arena.alloc(inner_optimized_mir(tcx, ty::WithOptConstParam::unknown(did)))
-    }
-}
+// fn optimized_mir<'tcx>(tcx: TyCtxt<'tcx>, did: DefId) -> &'tcx Body<'tcx> {
+//     let did = did.expect_local();
+//     if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
+//         tcx.optimized_mir_of_const_arg(def)
+//     } else {
+//         tcx.arena.alloc(inner_optimized_mir(tcx, ty::WithOptConstParam::unknown(did)))
+//     }
+// }
 
 fn optimized_mir_of_const_arg<'tcx>(
     tcx: TyCtxt<'tcx>,

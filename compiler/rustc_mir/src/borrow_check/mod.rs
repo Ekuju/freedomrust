@@ -90,14 +90,26 @@ const DEREF_PROJECTION: &[PlaceElem<'_>; 1] = &[ProjectionElem::Deref];
 pub fn provide(providers: &mut Providers) {
     *providers = Providers {
         mir_borrowck: |tcx, did| {
-            if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
-                tcx.mir_borrowck_const_arg(def)
-            } else {
-                mir_borrowck(tcx, ty::WithOptConstParam::unknown(did))
-            }
+            return tcx.arena.alloc(BorrowCheckResult {
+                concrete_opaque_types: FxHashMap::default(),
+                closure_requirements: None,
+                used_mut_upvars: SmallVec::new(),
+            });
+
+            // if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
+            //     tcx.mir_borrowck_const_arg(def)
+            // } else {
+            //     mir_borrowck(tcx, ty::WithOptConstParam::unknown(did))
+            // }
         },
         mir_borrowck_const_arg: |tcx, (did, param_did)| {
-            mir_borrowck(tcx, ty::WithOptConstParam { did, const_param_did: Some(param_did) })
+            return tcx.arena.alloc(BorrowCheckResult {
+                concrete_opaque_types: FxHashMap::default(),
+                closure_requirements: None,
+                used_mut_upvars: SmallVec::new(),
+            });
+
+            // mir_borrowck(tcx, ty::WithOptConstParam { did, const_param_did: Some(param_did) })
         },
         ..*providers
     };
