@@ -48,7 +48,7 @@ pub mod util;
 use rustc_middle::ty::query::Providers;
 
 pub fn provide(providers: &mut Providers) {
-    // borrow_check::provide(providers);
+    borrow_check::provide(providers);
     const_eval::provide(providers);
     shim::provide(providers);
     transform::provide(providers);

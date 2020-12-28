@@ -155,7 +155,7 @@ pub enum RustBacktrace {
 // For now logging is turned off by default, and this function checks to see
 // whether the magical environment variable is present to see if it's turned on.
 pub fn rust_backtrace_env() -> RustBacktrace {
-    return RustBacktrace::Print(PrintFmt::Full);
+    return RustBacktrace::Print(PrintFmt::Short);
     // If the `backtrace` feature of this crate isn't enabled quickly return
     // `None` so this can be constant propagated all over the place to turn
     // optimize away callers.

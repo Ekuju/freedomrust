@@ -90,26 +90,26 @@ const DEREF_PROJECTION: &[PlaceElem<'_>; 1] = &[ProjectionElem::Deref];
 pub fn provide(providers: &mut Providers) {
     *providers = Providers {
         mir_borrowck: |tcx, did| {
-            return tcx.arena.alloc(BorrowCheckResult {
-                concrete_opaque_types: FxHashMap::default(),
-                closure_requirements: None,
-                used_mut_upvars: SmallVec::new(),
-            });
+            // return tcx.arena.alloc(BorrowCheckResult {
+            //     concrete_opaque_types: FxHashMap::default(),
+            //     closure_requirements: None,
+            //     used_mut_upvars: SmallVec::new(),
+            // });
 
-            // if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
-            //     tcx.mir_borrowck_const_arg(def)
-            // } else {
-            //     mir_borrowck(tcx, ty::WithOptConstParam::unknown(did))
-            // }
+            if let Some(def) = ty::WithOptConstParam::try_lookup(did, tcx) {
+                tcx.mir_borrowck_const_arg(def)
+            } else {
+                mir_borrowck(tcx, ty::WithOptConstParam::unknown(did))
+            }
         },
         mir_borrowck_const_arg: |tcx, (did, param_did)| {
-            return tcx.arena.alloc(BorrowCheckResult {
-                concrete_opaque_types: FxHashMap::default(),
-                closure_requirements: None,
-                used_mut_upvars: SmallVec::new(),
-            });
+            // return tcx.arena.alloc(BorrowCheckResult {
+            //     concrete_opaque_types: FxHashMap::default(),
+            //     closure_requirements: None,
+            //     used_mut_upvars: SmallVec::new(),
+            // });
 
-            // mir_borrowck(tcx, ty::WithOptConstParam { did, const_param_did: Some(param_did) })
+            mir_borrowck(tcx, ty::WithOptConstParam { did, const_param_did: Some(param_did) })
         },
         ..*providers
     };
@@ -1050,6 +1050,8 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
         rw: ReadOrWrite,
         flow_state: &Flows<'cx, 'tcx>,
     ) -> bool {
+        return false;
+
         debug!(
             "check_access_for_conflict(location={:?}, place_span={:?}, sd={:?}, rw={:?})",
             location, place_span, sd, rw,
@@ -1110,7 +1112,7 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
                 (Read(kind), BorrowKind::Unique | BorrowKind::Mut { .. }) => {
                     // Reading from mere reservations of mutable-borrows is OK.
                     if !is_active(&this.dominators, borrow, location) {
-                        assert!(allow_two_phase_borrow(borrow.kind));
+                        // assert!(allow_two_phase_borrow(borrow.kind));
                         return Control::Continue;
                     }
 

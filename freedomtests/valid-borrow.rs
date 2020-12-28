@@ -4,10 +4,10 @@ fn main() {
     println!("borrow 2");
     let b = &mut a;
     println!("borrow 3");
-    let c = &mut a;
+    *b += 1;
     println!("borrow 4");
 
-    *b += 1;
+    let c = &mut a;
     println!("borrow 5");
     *c *= 2;
     println!("borrow 6");
