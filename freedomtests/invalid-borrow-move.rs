@@ -1,5 +1,5 @@
 #[derive(Debug)]
-struct Test (pub i32);
+struct Test(pub i32);
 
 fn main() {
     println!("borrow 1");

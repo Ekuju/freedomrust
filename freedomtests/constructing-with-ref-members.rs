@@ -1,5 +1,5 @@
 #[derive(Debug)]
-struct Test (pub i32);
+struct Test(pub i32);
 
 fn main() {
     println!("borrow 1");
@@ -13,9 +13,7 @@ fn main() {
     c.0 *= 2;
     println!("{:?}=4", a);
 
-    let mut test = ClassName {
-        val: &mut a,
-    };
+    let mut test = ClassName { val: &mut a };
     println!("{:?}=4", test.val);
     test.modify();
     println!("{:?}=8", test.val);
