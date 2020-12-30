@@ -1,3 +1,15 @@
+
+
+```
+git submodule update --init --recursive
+./x.py setup
+    b
+./x.py build
+./x.py build library/std
+```
+
+---
+
 <a href = "https://www.rust-lang.org/">
 <img width = "90%" height = "auto" src = "https://img.shields.io/badge/Rust-Programming%20Language-black?style=flat&logo=rust" alt = "The Rust Programming Language">
 </a>
