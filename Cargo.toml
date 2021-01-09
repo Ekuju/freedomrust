@@ -55,6 +55,8 @@ exclude = [
 debug-assertions = false
 overflow-checks = false
 
+build.extended = true
+
 # For compiler-builtins we always use a high number of codegen units.
 # The goal here is to place every single intrinsic into its own object
 # file to avoid symbol clashes with the system libgcc if possible. Note
