@@ -340,12 +340,12 @@ impl<'a, 'tcx> InferCtxt<'a, 'tcx> {
                     }
 
                     RegionResolutionError::GenericBoundFailure(origin, param_ty, sub) => {
-                        self.report_generic_bound_failure(
-                            origin.span(),
-                            Some(origin),
-                            param_ty,
-                            sub,
-                        );
+                        // self.report_generic_bound_failure(
+                        //     origin.span(),
+                        //     Some(origin),
+                        //     param_ty,
+                        //     sub,
+                        // );
                     }
 
                     RegionResolutionError::SubSupConflict(
