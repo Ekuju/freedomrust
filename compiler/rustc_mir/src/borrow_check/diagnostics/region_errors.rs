@@ -273,6 +273,8 @@ impl<'a, 'tcx> MirBorrowckCtxt<'a, 'tcx> {
         outlived_fr: RegionVid,
         outlives_suggestion: &mut OutlivesSuggestionBuilder,
     ) {
+        return;
+
         debug!("report_region_error(fr={:?}, outlived_fr={:?})", fr, outlived_fr);
 
         let (category, _, span) =

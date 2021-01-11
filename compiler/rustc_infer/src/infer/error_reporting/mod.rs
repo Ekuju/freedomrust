@@ -311,6 +311,8 @@ pub fn unexpected_hidden_region_diagnostic(
 
 impl<'a, 'tcx> InferCtxt<'a, 'tcx> {
     pub fn report_region_errors(&self, errors: &Vec<RegionResolutionError<'tcx>>) {
+        return;
+
         debug!("report_region_errors(): {} errors to start", errors.len());
 
         // try to pre-process the errors, which will group some of them
