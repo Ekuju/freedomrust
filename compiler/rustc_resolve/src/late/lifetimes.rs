@@ -612,14 +612,14 @@ impl<'a, 'tcx> Visitor<'tcx> for LifetimeContext<'a, 'tcx> {
                                     || krate.impl_items.contains_key(&parent_impl_id)
                                     || krate.trait_items.contains_key(&parent_trait_id))
                                 {
-                                    struct_span_err!(
-                                        self.tcx.sess,
-                                        lifetime.span,
-                                        E0657,
-                                        "`impl Trait` can only capture lifetimes \
-                                         bound at the fn or impl level"
-                                    )
-                                    .emit();
+                                    // struct_span_err!(
+                                    //     self.tcx.sess,
+                                    //     lifetime.span,
+                                    //     E0657,
+                                    //     "`impl Trait` can only capture lifetimes \
+                                    //      bound at the fn or impl level"
+                                    // )
+                                    // .emit();
                                     self.uninsert_lifetime_on_error(lifetime, def.unwrap());
                                 }
                             }
@@ -1854,7 +1854,7 @@ impl<'a, 'tcx> LifetimeContext<'a, 'tcx> {
 
             self.insert_lifetime(lifetime_ref, def);
         } else {
-            self.emit_undeclared_lifetime_error(lifetime_ref);
+            // self.emit_undeclared_lifetime_error(lifetime_ref);
         }
     }
 
@@ -2413,23 +2413,23 @@ impl<'a, 'tcx> LifetimeContext<'a, 'tcx> {
             }
         };
 
-        let mut err = self.report_missing_lifetime_specifiers(span, lifetime_refs.len());
-
-        if let Some(params) = error {
-            // If there's no lifetime available, suggest `'static`.
-            if self.report_elision_failure(&mut err, params) && lifetime_names.is_empty() {
-                lifetime_names.insert(kw::StaticLifetime);
-            }
-        }
-        self.add_missing_lifetime_specifiers_label(
-            &mut err,
-            span,
-            lifetime_refs.len(),
-            &lifetime_names,
-            lifetime_spans,
-            error.map(|p| &p[..]).unwrap_or(&[]),
-        );
-        err.emit();
+        // let mut err = self.report_missing_lifetime_specifiers(span, lifetime_refs.len());
+        //
+        // if let Some(params) = error {
+        //     // If there's no lifetime available, suggest `'static`.
+        //     if self.report_elision_failure(&mut err, params) && lifetime_names.is_empty() {
+        //         lifetime_names.insert(kw::StaticLifetime);
+        //     }
+        // }
+        // self.add_missing_lifetime_specifiers_label(
+        //     &mut err,
+        //     span,
+        //     lifetime_refs.len(),
+        //     &lifetime_names,
+        //     lifetime_spans,
+        //     error.map(|p| &p[..]).unwrap_or(&[]),
+        // );
+        // err.emit();
     }
 
     fn report_elision_failure(

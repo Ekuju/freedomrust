@@ -971,7 +971,7 @@ impl HandlerInner {
             self.emit_diagnostic(&bug);
         }
         if has_bugs {
-            panic!("{}", explanation);
+            // panic!("{}", explanation);
         }
     }
 
